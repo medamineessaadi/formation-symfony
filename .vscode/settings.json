@@ -1,0 +1,4 @@
+{
+    "npm.exclude": ""
+    "files.associations": {"*.twig": "html"},
+}
