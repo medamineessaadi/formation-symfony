@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Ad;
 use App\Form\ImageType;
+use App\form\ApplicationType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,26 +15,9 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-class AdType extends AbstractType
+class AdType extends ApplicationType
 {  
 
-     /**
-    * permet d'avoir la configuration de base d'un champ!
-    *
-    * @param string $titre
-    * @param string $placeholder
-    * @param array  $options
-    * @return array
-    */
-    private function getConfiguration($titre,$placeholder,$options=[])
-    {
-        return array_merge([
-            'label'=>$titre,
-            'attr'=>[
-                'placeholder'=>$placeholder
-                    ]
-                            ],$options);
-    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
