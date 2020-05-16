@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 use App\Entity\Ad;
 use Faker\Factory;
+use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Image;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -20,35 +21,52 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     { 
           $faker= Factory::create('fr-FR');
-//nous gerons les utilisateurs
 
-$users  = [];
-$genres = ['male','female'];
+    //nous gerons les roles
 
-for($i=1;$i<=10;$i++)
-{
-    $user=new User();
+        $adminRole=new Role();
+        $adminRole->setTilte('ROLE_ADMIN');
+        $manager->persist($adminRole);
+    // User avec Role
+        $adminUser= new User();
+        $adminUser  ->setFirstName('amine')
+                    ->setLastName('Essaadi')
+                    ->setEmail('med.amine.essaadi@gmail.com')
+                    ->setHash($this->encoder->encodePassword($adminUser,'password'))
+                    ->setPicture('https://randomuser.me/api/portraits/men/2.jpg')
+                    ->setIntroduction($faker->sentence())
+                    ->setDescription('<p>'.join('</p><p>',$faker->paragraphs(3)).'</p>')
+                    ->addUserRole($adminRole);
+        $manager->persist($adminUser);
+    //nous gerons les utilisateurs
 
-    $genre=$faker->randomElement($genres); 
+        $users  = [];
+        $genres = ['male','female'];
 
-    $picture   = 'https://randomuser.me/api/portraits/';
-    $pictureId = $faker->numberBetween(0,99).'.jpg';
-    $picture  .= ($genre =='male' ? 'men/' : 'women/').$pictureId;
-   
-    $hash = $this->encoder->encodePassword($user,'password');
+        for($i=1;$i<=10;$i++)
+        {
+            $user=new User();
 
-    $user->setFirstName($faker->firstname($genre))
-         ->setLastName($faker->lastname)
-         ->setEmail($faker->email)
-         ->setIntroduction($faker->sentence())
-         ->setDescription('<p>'.join('</p><p>',$faker->paragraphs(3)).'</p>')
-         ->setHash($hash)
-         ->setPicture($picture);
+            $genre=$faker->randomElement($genres); 
+
+            $picture   = 'https://randomuser.me/api/portraits/';
+            $pictureId = $faker->numberBetween(0,99).'.jpg';
+            $picture  .= ($genre =='male' ? 'men/' : 'women/').$pictureId;
+    
+            $hash = $this->encoder->encodePassword($user,'password');
+
+            $user->setFirstName($faker->firstname($genre))
+                ->setLastName($faker->lastname)
+                ->setEmail($faker->email)
+                ->setIntroduction($faker->sentence())
+                ->setDescription('<p>'.join('</p><p>',$faker->paragraphs(3)).'</p>')
+                ->setHash($hash)
+                ->setPicture($picture);
 
 
-         $manager->persist($user);
-        $users []=$user;
-}
+            $manager->persist($user);
+            $users []=$user;
+        }
 
 
  //nous gerons les annonces
