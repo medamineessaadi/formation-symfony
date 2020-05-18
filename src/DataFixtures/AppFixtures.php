@@ -6,6 +6,7 @@ use Faker\Factory;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Image;
+use App\Entity\Booking;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -25,7 +26,7 @@ class AppFixtures extends Fixture
     //nous gerons les roles
 
         $adminRole=new Role();
-        $adminRole->setTilte('ROLE_ADMIN');
+        $adminRole->setTitle('ROLE_ADMIN');
         $manager->persist($adminRole);
     // User avec Role
         $adminUser= new User();
@@ -89,15 +90,44 @@ class AppFixtures extends Fixture
         ->setAuthor($user);
 
         // nous gerons les images
+
         for($j=1;$j<=mt_rand(2,5);$j++)
         {
             $image=new Image();
             $image->setUrl($faker->imageUrl())
                   ->setCaption($faker->sentence())
                   ->setAd($ad);
-                  $manager->persist($image);
-                  
+
+                  $manager->persist($image);         
         }
+
+        //Gestion de reservation 
+        
+        for($j=1;$j<=mt_rand(0,10);$j++)
+        {
+
+            $booking =new Booking();
+
+            $duration = mt_rand(3,10);
+            $booker   = $users[mt_rand(0,count($users)-1)];
+            $comment  = $faker->paragraph();
+
+            $createdAt = $faker->dateTimeBetween('-6 months');
+            $startDate = $faker->dateTimeBetween('-3 months');
+            $endDate   = (clone $startDate)->modify("+$duration days");
+            $amount    = $ad->getPrice()*$duration;
+
+            $booking->setBooker($booker)
+                    ->setAd($ad)
+                    ->setStartDate($startDate)
+                    ->setEndDate($endDate)
+                    ->setCreatedAt($createdAt)
+                    ->setAmount($amount)
+                    ->setComment($comment);
+
+                  $manager->persist($booking);         
+        }
+
         $manager->persist($ad);
         }
        
