@@ -15,12 +15,11 @@
                      <th>Note</th>
                      <th>Annonce</th>
                     <th></th>
-                </tr>
-                
+                </tr>  
             </thead>
 
             <tbody>
-                {% for comment in comments %}
+                {% for comment in pagination.data %}
                 <tr>
                     <td>{{comment.id}}</td>
                     <td>{{comment.createdAt|date("d/m/Y H:i" )}}</td>
@@ -40,12 +39,11 @@
                         <a href="{{ path('admin_comment_delete',{'id':comment.id})}}" class="btn btn-danger">
                              <i class="fas fa-trash"></i>
                         </a>
-                        
                     </td>
                 </tr>
                 {% endfor %}  
             </tbody>
-
         </table>
-   </div>
+        {{ pagination.display() }}
+       </div>
 {% endblock %}

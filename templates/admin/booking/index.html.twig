@@ -23,7 +23,7 @@
             </thead>
 
             <tbody>
-                {% for booking in bookings %}
+                {% for booking in pagination.data %}
                 <tr>
                     <td>{{booking.id}}</td>
                     <td>
@@ -48,7 +48,7 @@
                 </tr>
                 {% endfor %}  
             </tbody>
-
         </table>
-   </div>
+        {{ pagination.display() }}   
+    </div>
 {% endblock %}
